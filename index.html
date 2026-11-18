@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MuseAI (AutoMuse) — Mint Desk | Agent-Native Mint on BSC</title>
-<meta name="description" content="MuseAI (AutoMuse) mint desk: no wallet connection on this site. Check the live on-chain status, copy the prompt to your Binance Agentic Wallet agent, and mint — 500 Agent shares + 500 Public shares at one flat price, read live from the verified contract.">
+<meta name="description" content="MuseAI (AutoMuse) mint desk: check the live on-chain status, mint through your Binance Agentic Wallet agent with a copyable prompt, or connect any wallet and mint directly — 500 Agent shares + 500 Public shares at one flat price, read live from the verified contract.">
 <style>
   :root{
     --bg:#0a0a10; --panel:#101018; --panel2:#14141f; --line:#262635; --line2:#32324a;
@@ -65,6 +65,7 @@
     <div class="brand">MuseAI <span>(AutoMuse)</span> — Mint Desk</div>
     <nav class="links">
       <a href="#status">Mint status</a>
+      <a href="#direct">Direct mint</a>
       <a href="#how">How to mint</a>
       <a href="#contract">Contract</a>
       <a href="https://automuseai.github.io/quest/">Quest page</a>
@@ -74,7 +75,7 @@
 
   <p class="eyebrow" style="margin-top:22px">MuseAI / Genesis Mint</p>
   <h1>Mint your AutoMuse — through your own agent.</h1>
-  <p class="muted" style="max-width:640px">There is <strong style="color:var(--text)">no wallet connection on this site</strong>. This page is a live status board: it reads the mint contract on BNB Smart Chain and hands you a prompt for your Binance Agentic Wallet agent. Your agent prepares the mint; you review and confirm in your wallet. 1 share = 1,000,000 AutoMuse.</p>
+  <p class="muted" style="max-width:640px">Two ways to mint, one verified contract: hand the prompt below to your <strong style="color:var(--text)">Binance Agentic Wallet agent</strong>, or <strong style="color:var(--text)">connect any wallet</strong> and mint directly on this page. The board below reads the mint contract on BNB Smart Chain live. 1 share = 1,000,000 AutoMuse.</p>
 
   <section class="panel" id="status">
     <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">
@@ -106,6 +107,39 @@
     <p class="statusline" id="snapshotLine">On-chain snapshot: connecting… · refreshes every 30 seconds</p>
   </section>
 
+  <section class="panel" id="direct">
+    <p class="eyebrow">Direct mint / Any wallet</p>
+    <h2>No agent? Connect a wallet and mint here</h2>
+    <p class="muted">Same contract, same live price — the mint happens from your wallet in one transaction, and the AutoMuse arrives in that same transaction. On a phone without a wallet browser, open this page inside your wallet app with the buttons at the bottom of this panel.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <button id="connectBtn" type="button">Connect wallet</button>
+      <span class="muted" id="walletState" style="font-size:13.5px">Not connected.</span>
+    </div>
+    <div id="mintForm" style="display:none;margin-top:16px">
+      <div class="lanes">
+        <button class="ghost" id="pickAgent" type="button">Agent lane — needs Binance Agent ID</button>
+        <button class="ghost" id="pickPublic" type="button">Public lane — any wallet</button>
+      </div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:16px;align-items:flex-end">
+        <label style="flex:1;min-width:150px">Shares (1 = 1,000,000 AutoMuse)
+          <input type="text" id="sharesInput" inputmode="numeric" value="1" style="margin-top:6px">
+        </label>
+        <div style="min-width:190px">Total to pay<br><b id="costOut" style="font-size:17px">…</b></div>
+      </div>
+      <p class="muted" id="capNote" style="font-size:13px"></p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <button id="mintBtn" type="button">Mint</button>
+        <span id="mintState" style="font-size:13.5px"></span>
+      </div>
+      <p class="err" id="mintErr" style="font-size:13px;white-space:pre-wrap"></p>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:14px;flex-wrap:wrap;font-size:13.5px">
+      <a href="https://metamask.app.link/dapp/automuseai.github.io/desk/" target="_blank" rel="noopener">Open in MetaMask</a>
+      <a href="https://link.trustwallet.com/open_url?coin_id=20000714&url=https%3A%2F%2Fautomuseai.github.io%2Fdesk%2F" target="_blank" rel="noopener">Open in Trust Wallet</a>
+      <a href="https://bscscan.com/address/0x4f468aff03ce7de1b6512ab044f338f92689ce2e#writeContract" target="_blank" rel="noopener">Mint via BscScan instead</a>
+    </div>
+  </section>
+
   <details>
     <summary>One flat price — read live from the contract</summary>
     <p class="muted">Both lanes pay the same price: <span class="mono">pricePerShare()</span>, 0.000841 BNB (≈ $0.50) at launch. This page never hard-codes it — the number above is read from the contract every 30 seconds. Payment must equal exactly <span class="mono">shares × pricePerShare()</span>; any other amount reverts, so the contract cannot overcharge you. The owner can adjust the price for future mints with <span class="mono">setPrice()</span> — it applies to both lanes equally, and shares already minted are never affected. Max 15 shares per wallet across both lanes combined.</p>
@@ -116,7 +150,7 @@
     <h2>How to mint with your agent</h2>
     <div class="steps">
       <div class="step"><div class="n">STEP 01</div><h3>Open your BAW agent</h3><p class="muted">Use the Binance Agentic Wallet that holds your Agent ID (for the Agent lane) or any wallet for the Public lane. Keep a little BNB for gas. Developer Mode may be required for contract calls.</p></div>
-      <div class="step"><div class="n">STEP 02</div><h3>Copy the prompt below</h3><p class="muted">The prompt makes your agent verify the contract first, then read your lane status. No wallet connection on this site; no spot is created by reading.</p></div>
+      <div class="step"><div class="n">STEP 02</div><h3>Copy the prompt below</h3><p class="muted">The prompt makes your agent verify the contract first, then read your lane status. Reading is free and signs nothing.</p></div>
       <div class="step"><div class="n">STEP 03</div><h3>Preview, then confirm</h3><p class="muted">Ask your agent for the mint. Review the preview — lane, shares, exact BNB, gas — and confirm in BAW. Tokens arrive in the same transaction; there is no reservation or escrow.</p></div>
     </div>
   </section>
@@ -214,6 +248,7 @@ This status request is READ-ONLY: do not approve, sign, claim or send anything. 
   $("copyAddr").addEventListener("click", function(){ copyText(CONTRACT, $("copyState"), "Contract address copied."); });
 
   var provider = null, contract = null, rpcIdx = 0;
+  var lastPriceWei = null;
   function makeProvider(){
     provider = new ethers.JsonRpcProvider(RPCS[rpcIdx % RPCS.length], 56, { staticNetwork: true });
     contract = new ethers.Contract(CONTRACT, ABI, provider);
@@ -237,6 +272,7 @@ This status request is READ-ONLY: do not approve, sign, claim or send anything. 
       $("kvTotalMinted").textContent = fmt(aM + pM) + " / 1,000 shares";
       $("barTotal").style.width = ((aM + pM) / 1000 * 100) + "%";
       $("kvPrice").textContent = bnb(r[2]) + " BNB / share";
+      lastPriceWei = r[2]; updateCost();
       $("kvRaised").textContent = bnb(r[7]) + " BNB";
       $("kvTrading").textContent = r[6] ? "Open" : "Locked — opens after the PancakeSwap pool";
       var chip = $("stateChip");
@@ -266,6 +302,167 @@ This status request is READ-ONLY: do not approve, sign, claim or send anything. 
     }).catch(function(){
       out.innerHTML = '<p class="err">Read failed — try again in a moment.</p>';
     });
+  });
+
+
+  // ---------- direct wallet mint ----------
+  var REGISTRY = "0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F";
+  var WRITE_ABI = [
+    "function mintAgent(uint256 shares) payable",
+    "function mintPublic(uint256 shares) payable",
+    "function mintedBy(address) view returns (uint256)",
+    "function pricePerShare() view returns (uint256)",
+    "function agentSharesRemaining() view returns (uint256)",
+    "function publicSharesRemaining() view returns (uint256)"
+  ];
+  var announced = [];
+  window.addEventListener("eip6963:announceProvider", function(e){ announced.push(e.detail.provider); });
+  try { window.dispatchEvent(new Event("eip6963:requestProvider")); } catch(e){}
+  var wRaw = null, wAddr = null, wLane = "public", wBusy = false, wEventsBound = false;
+
+  function injected(){
+    if (announced.length) return announced[0];
+    if (window.ethereum) return window.ethereum;
+    return null;
+  }
+  function waitInjected(ms){
+    return new Promise(function(res){
+      var t0 = Date.now();
+      (function poll(){
+        var p = injected();
+        if (p || Date.now() - t0 > ms) res(p);
+        else setTimeout(poll, 150);
+      })();
+    });
+  }
+  function shortAddr(a){ return a.slice(0, 6) + "…" + a.slice(-4); }
+  function sharesVal(){
+    var n = parseInt(($("sharesInput").value || "").replace(/[^0-9]/g, ""), 10);
+    return isNaN(n) ? 0 : n;
+  }
+  function updateCost(){
+    var n = sharesVal();
+    if (lastPriceWei === null){ $("costOut").textContent = "…"; return; }
+    if (n <= 0){ $("costOut").textContent = "Enter 1–15 shares"; return; }
+    $("costOut").textContent = bnb(lastPriceWei * BigInt(n)) + " BNB (" + fmt(n) + " × " + bnb(lastPriceWei) + ")";
+  }
+  function laneStyles(){
+    var on = "border-color:var(--accent);color:var(--accent);background:var(--panel)";
+    var off = "";
+    $("pickAgent").style.cssText = wLane === "agent" ? on : off;
+    $("pickPublic").style.cssText = wLane === "public" ? on : off;
+  }
+  function refreshCaps(){
+    if (!wAddr) return;
+    if (!contract) makeProvider();
+    var rc = new ethers.Contract(CONTRACT, WRITE_ABI, provider);
+    Promise.all([ rc.mintedBy(wAddr), rc.agentSharesRemaining(), rc.publicSharesRemaining() ]).then(function(r){
+      var mine = Number(r[0]);
+      var laneLeft = wLane === "agent" ? Number(r[1]) : Number(r[2]);
+      $("capNote").textContent = "Your wallet has minted " + mine + " / 15 shares — up to " + Math.max(0, 15 - mine) +
+        " more. This lane has " + fmt(laneLeft) + " shares left.";
+      if (wLane === "agent"){
+        var reg = new ethers.Contract(REGISTRY, ["function balanceOf(address) view returns (uint256)"], provider);
+        reg.balanceOf(wAddr).then(function(b){
+          if (Number(b) === 0) $("capNote").textContent += " Warning: this wallet holds no Binance Agent ID — the Agent lane will revert. Use the Public lane.";
+        }).catch(function(){});
+      }
+    }).catch(function(){});
+  }
+  function setLane(l){ wLane = l; laneStyles(); refreshCaps(); }
+  $("pickAgent").addEventListener("click", function(){ setLane("agent"); });
+  $("pickPublic").addEventListener("click", function(){ setLane("public"); });
+  $("sharesInput").addEventListener("input", updateCost);
+
+  async function ensureBSC(){
+    var net = await new ethers.BrowserProvider(wRaw).getNetwork();
+    if (net.chainId === 56n) return true;
+    try {
+      await wRaw.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x38" }] });
+      return true;
+    } catch(e){
+      if (e && e.code === 4902){
+        try {
+          await wRaw.request({ method: "wallet_addEthereumChain", params: [{ chainId: "0x38", chainName: "BNB Smart Chain", nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 }, rpcUrls: ["https://bsc-dataseed1.binance.org"], blockExplorerUrls: ["https://bscscan.com"] }] });
+          return true;
+        } catch(e2){ return false; }
+      }
+      return false; /* rejected: soft warning, stay connected */
+    }
+  }
+  function bindEvents(){
+    if (wEventsBound || !wRaw || !wRaw.on) return;
+    wEventsBound = true;
+    wRaw.on("accountsChanged", function(accs){
+      if (!accs || !accs.length){ wAddr = null; $("mintForm").style.display = "none"; $("walletState").textContent = "Not connected."; $("connectBtn").textContent = "Connect wallet"; return; }
+      wAddr = accs[0];
+      $("walletState").textContent = "Connected: " + shortAddr(wAddr);
+      refreshCaps();
+    });
+    wRaw.on("chainChanged", function(){ $("mintErr").textContent = ""; refreshCaps(); });
+  }
+  $("connectBtn").addEventListener("click", async function(){
+    $("mintErr").textContent = "";
+    var p = await waitInjected(1800);
+    if (!p){ $("walletState").textContent = "No wallet found in this browser — open this page inside MetaMask or Trust Wallet (buttons below), or mint through your agent."; return; }
+    wRaw = p;
+    try {
+      var accs = await p.request({ method: "eth_accounts" });
+      if (!accs || !accs.length) accs = await p.request({ method: "eth_requestAccounts" });
+      if (!accs || !accs.length){ $("walletState").textContent = "No account shared by the wallet."; return; }
+      wAddr = accs[0];
+      bindEvents();
+      $("walletState").textContent = "Connected: " + shortAddr(wAddr);
+      $("connectBtn").textContent = "Wallet connected";
+      $("mintForm").style.display = "block";
+      laneStyles();
+      if (!contract) makeProvider();
+      try { lastPriceWei = await new ethers.Contract(CONTRACT, WRITE_ABI, provider).pricePerShare(); } catch(e){}
+      updateCost(); refreshCaps();
+      var onBSC = await ensureBSC();
+      if (!onBSC) $("walletState").textContent = "Connected: " + shortAddr(wAddr) + " — but not on BNB Smart Chain. The Mint button will ask to switch (no rush).";
+    } catch(e){
+      $("mintErr").textContent = "Wallet error: " + ((e && (e.shortMessage || e.message)) || e);
+    }
+  });
+
+  $("mintBtn").addEventListener("click", async function(){
+    if (wBusy) return;
+    $("mintErr").textContent = ""; $("mintState").textContent = "";
+    if (!wAddr || !wRaw){ $("mintErr").textContent = "Connect a wallet first."; return; }
+    var n = sharesVal();
+    if (n < 1 || n > 15){ $("mintErr").textContent = "Shares must be between 1 and 15."; return; }
+    wBusy = true; $("mintBtn").disabled = true;
+    try {
+      var onBSC = await ensureBSC();
+      if (!onBSC){ $("mintErr").textContent = "Still not on BNB Smart Chain — switch networks in your wallet, then tap Mint again."; return; }
+      var bp = new ethers.BrowserProvider(wRaw);
+      var signer = await bp.getSigner();
+      var wc = new ethers.Contract(CONTRACT, WRITE_ABI, signer);
+      var price = await wc.pricePerShare();
+      var total = price * BigInt(n);
+      var fn = wLane === "agent" ? wc.mintAgent : wc.mintPublic;
+      $("mintState").textContent = "Simulating…";
+      try { await fn.staticCall(n, { value: total }); }
+      catch(simErr){
+        var reason = (simErr && (simErr.reason || simErr.shortMessage || simErr.message)) || simErr;
+        $("mintErr").textContent = "The contract would reject this mint: " + reason;
+        $("mintState").textContent = "";
+        return;
+      }
+      $("mintState").textContent = "Confirm in your wallet…";
+      var tx = await fn(n, { value: total });
+      $("mintState").innerHTML = 'Sent — waiting for confirmation… <a href="https://bscscan.com/tx/' + tx.hash + '" target="_blank" rel="noopener">view tx</a>';
+      await tx.wait();
+      $("mintState").innerHTML = '<span class="ok">Minted ' + n + ' share' + (n > 1 ? "s" : "") + '!</span> <a href="https://bscscan.com/tx/' + tx.hash + '" target="_blank" rel="noopener">view tx</a>';
+      refresh(); refreshCaps();
+    } catch(e){
+      if (e && (e.code === 4001 || e.code === "ACTION_REJECTED")) $("mintErr").textContent = "Rejected in the wallet — nothing was sent.";
+      else $("mintErr").textContent = "Wallet error: " + ((e && (e.shortMessage || e.message)) || e);
+      $("mintState").textContent = "";
+    } finally {
+      wBusy = false; $("mintBtn").disabled = false;
+    }
   });
 
   if (window.ethers){ refresh(); setInterval(refresh, 30000); }
