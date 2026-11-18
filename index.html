@@ -110,12 +110,12 @@
   <section class="panel" id="direct">
     <p class="eyebrow">Direct mint / Any wallet</p>
     <h2>No agent? Connect a wallet and mint here</h2>
-    <p class="muted">Same contract, same live price — the mint happens from your wallet in one transaction, and the AutoMuse arrives in that same transaction. On a phone without a wallet browser, open this page inside your wallet app with the buttons at the bottom of this panel.</p>
+    <p class="muted"><strong style="color:var(--text)">No AI agent and no AI wallet needed</strong> — a normal wallet (MetaMask, Trust Wallet, Binance Web3 Wallet, any BSC wallet) is enough, and the Public lane needs no Agent ID at all. Same contract, same live price — the mint happens from your wallet in one transaction, and the AutoMuse arrives in that same transaction. On a phone without a wallet browser, open this page inside your wallet app with the buttons at the bottom of this panel.</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
       <button id="connectBtn" type="button">Connect wallet</button>
-      <span class="muted" id="walletState" style="font-size:13.5px">Not connected.</span>
+      <span class="muted" id="walletState" style="font-size:13.5px">Not connected yet — the form below is already live; connect when you are ready to mint.</span>
     </div>
-    <div id="mintForm" style="display:none;margin-top:16px">
+    <div id="mintForm" style="margin-top:16px">
       <div class="lanes">
         <button class="ghost" id="pickAgent" type="button">Agent lane — needs Binance Agent ID</button>
         <button class="ghost" id="pickPublic" type="button">Public lane — any wallet</button>
@@ -126,9 +126,9 @@
         </label>
         <div style="min-width:190px">Total to pay<br><b id="costOut" style="font-size:17px">…</b></div>
       </div>
-      <p class="muted" id="capNote" style="font-size:13px"></p>
+      <p class="muted" id="capNote" style="font-size:13px">Public lane: any wallet, no Agent ID needed. Agent lane: only for Binance Agent ID holders. Max 15 shares per wallet.</p>
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-        <button id="mintBtn" type="button">Mint</button>
+        <button id="mintBtn" type="button">Connect wallet to mint</button>
         <span id="mintState" style="font-size:13.5px"></span>
       </div>
       <p class="err" id="mintErr" style="font-size:13px;white-space:pre-wrap"></p>
@@ -394,14 +394,14 @@ This status request is READ-ONLY: do not approve, sign, claim or send anything. 
     if (wEventsBound || !wRaw || !wRaw.on) return;
     wEventsBound = true;
     wRaw.on("accountsChanged", function(accs){
-      if (!accs || !accs.length){ wAddr = null; $("mintForm").style.display = "none"; $("walletState").textContent = "Not connected."; $("connectBtn").textContent = "Connect wallet"; return; }
+      if (!accs || !accs.length){ wAddr = null; $("walletState").textContent = "Not connected."; $("connectBtn").textContent = "Connect wallet"; $("mintBtn").textContent = "Connect wallet to mint"; return; }
       wAddr = accs[0];
       $("walletState").textContent = "Connected: " + shortAddr(wAddr);
       refreshCaps();
     });
     wRaw.on("chainChanged", function(){ $("mintErr").textContent = ""; refreshCaps(); });
   }
-  $("connectBtn").addEventListener("click", async function(){
+  async function doConnect(){
     $("mintErr").textContent = "";
     var p = await waitInjected(1800);
     if (!p){ $("walletState").textContent = "No wallet found in this browser — open this page inside MetaMask or Trust Wallet (buttons below), or mint through your agent."; return; }
@@ -414,6 +414,7 @@ This status request is READ-ONLY: do not approve, sign, claim or send anything. 
       bindEvents();
       $("walletState").textContent = "Connected: " + shortAddr(wAddr);
       $("connectBtn").textContent = "Wallet connected";
+      $("mintBtn").textContent = "Mint";
       $("mintForm").style.display = "block";
       laneStyles();
       if (!contract) makeProvider();
@@ -424,12 +425,13 @@ This status request is READ-ONLY: do not approve, sign, claim or send anything. 
     } catch(e){
       $("mintErr").textContent = "Wallet error: " + ((e && (e.shortMessage || e.message)) || e);
     }
-  });
+  }
+  $("connectBtn").addEventListener("click", doConnect);
 
   $("mintBtn").addEventListener("click", async function(){
     if (wBusy) return;
     $("mintErr").textContent = ""; $("mintState").textContent = "";
-    if (!wAddr || !wRaw){ $("mintErr").textContent = "Connect a wallet first."; return; }
+    if (!wAddr || !wRaw){ await doConnect(); return; }
     var n = sharesVal();
     if (n < 1 || n > 15){ $("mintErr").textContent = "Shares must be between 1 and 15."; return; }
     wBusy = true; $("mintBtn").disabled = true;
