@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MuseAI (AutoMuse) — Mint Desk | Agent-Native Mint on BSC</title>
+<meta name="description" content="MuseAI (AutoMuse) mint desk: no wallet connection on this site. Check the live on-chain status, copy the prompt to your Binance Agentic Wallet agent, and mint — 500 Agent shares + 500 Public shares at one flat price, read live from the verified contract.">
+<style>
+  :root{
+    --bg:#0a0a10; --panel:#101018; --panel2:#14141f; --line:#262635; --line2:#32324a;
+    --text:#f4f4f8; --muted:#9a9ab0; --accent:#c9b8ff; --accent-deep:#8f7fe8;
+    --green:#7fc98f; --warn:#e0b34d; --err:#e07a7a; --radius:12px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6}
+  a{color:var(--accent)}
+  .wrap{max-width:820px;margin:0 auto;padding:22px 16px 64px}
+  header.top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:8px 0 18px;border-bottom:1px solid var(--line)}
+  .brand{font-weight:800;font-size:19px}
+  .brand span{color:var(--accent)}
+  nav.links{display:flex;gap:16px;flex-wrap:wrap;font-size:13.5px}
+  nav.links a{color:var(--muted);text-decoration:none}
+  nav.links a:hover{color:var(--accent)}
+  .eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+  h1{font-size:34px;line-height:1.15;margin:22px 0 10px}
+  h2{font-size:21px;margin:0 0 10px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin:18px 0}
+  .muted{color:var(--muted)}
+  .chip{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;padding:4px 10px;border-radius:999px;border:1px solid var(--line2);color:var(--muted);text-transform:uppercase}
+  .chip.live{color:#0d0d14;background:var(--green);border-color:var(--green)}
+  .chip.closed{color:#fff;background:var(--err);border-color:var(--err)}
+  .bar{height:8px;background:#08080e;border-radius:99px;overflow:hidden;margin-top:8px}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent-deep),var(--accent));width:0%}
+  .lanes{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:640px){.lanes{grid-template-columns:1fr}}
+  .lane{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px}
+  .lane .tag{font-size:11px;letter-spacing:.18em;color:var(--accent);text-transform:uppercase}
+  .lane .big{font-size:24px;font-weight:800;margin:4px 0}
+  .kv{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+  .kv:last-child{border-bottom:none}
+  code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;word-break:break-all}
+  button{cursor:pointer;border:none;border-radius:9px;padding:11px 18px;font-size:14.5px;font-weight:700;background:var(--accent);color:#17122b}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  button.ghost{background:transparent;border:1px solid var(--line2);color:var(--text);font-weight:600}
+  textarea{width:100%;min-height:210px;background:#08080e;border:1px solid var(--line);border-radius:10px;color:#d8d8ea;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.8px;line-height:1.55;resize:vertical}
+  input[type=text]{width:100%;background:#08080e;border:1px solid var(--line);border-radius:9px;color:var(--text);padding:11px 12px;font-size:14px;font-family:ui-monospace,Menlo,Consolas,monospace}
+  .steps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  @media(max-width:640px){.steps{grid-template-columns:1fr}}
+  .step{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px}
+  .step .n{font-size:11px;letter-spacing:.18em;color:var(--accent)}
+  .step h3{margin:6px 0;font-size:15.5px}
+  details{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:12px 0;background:var(--panel)}
+  summary{cursor:pointer;font-weight:700}
+  .statusline{font-size:13px;color:var(--muted);margin-top:10px}
+  .count{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:700}
+  .addrrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  footer{color:var(--muted);font-size:13px;margin-top:30px;border-top:1px solid var(--line);padding-top:18px}
+  .ok{color:var(--green)} .warn{color:var(--warn)} .err{color:var(--err)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">MuseAI <span>(AutoMuse)</span> — Mint Desk</div>
+    <nav class="links">
+      <a href="#status">Mint status</a>
+      <a href="#how">How to mint</a>
+      <a href="#contract">Contract</a>
+      <a href="https://automuseai.github.io/quest/">Quest page</a>
+      <a href="https://github.com/automuseai" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </header>
+
+  <p class="eyebrow" style="margin-top:22px">MuseAI / Genesis Mint</p>
+  <h1>Mint your AutoMuse — through your own agent.</h1>
+  <p class="muted" style="max-width:640px">There is <strong style="color:var(--text)">no wallet connection on this site</strong>. This page is a live status board: it reads the mint contract on BNB Smart Chain and hands you a prompt for your Binance Agentic Wallet agent. Your agent prepares the mint; you review and confirm in your wallet. 1 share = 1,000,000 AutoMuse.</p>
+
+  <section class="panel" id="status">
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">
+      <h2 style="margin:0">Live mint status</h2>
+      <span class="chip" id="stateChip">READING…</span>
+    </div>
+    <div class="kv" style="margin-top:10px"><span>Total minted</span><b id="kvTotalMinted">…</b></div>
+    <div class="bar"><i id="barTotal"></i></div>
+    <div class="kv"><span>Price per share (live from contract)</span><b id="kvPrice">…</b></div>
+    <div class="kv"><span>Mint closes</span><b>30 November 2026 · in <span class="count" id="countdown">…</span></b></div>
+    <div class="kv"><span>BNB raised (held in contract)</span><b id="kvRaised">…</b></div>
+    <div class="kv"><span>Trading</span><b id="kvTrading">…</b></div>
+    <div class="lanes" style="margin-top:14px">
+      <div class="lane">
+        <div class="tag">Agent lane · Binance Agent ID</div>
+        <div class="big" id="agentBig">— / 500</div>
+        <div class="bar"><i id="barAgent"></i></div>
+        <div class="kv"><span>Shares left in this lane</span><b id="agentLeft">…</b></div>
+        <div class="kv"><span>Per-wallet cap</span><b>15 shares (both lanes)</b></div>
+      </div>
+      <div class="lane">
+        <div class="tag">Public lane · Any wallet</div>
+        <div class="big" id="publicBig">— / 500</div>
+        <div class="bar"><i id="barPublic"></i></div>
+        <div class="kv"><span>Shares left in this lane</span><b id="publicLeft">…</b></div>
+        <div class="kv"><span>Per-wallet cap</span><b>15 shares (both lanes)</b></div>
+      </div>
+    </div>
+    <p class="statusline" id="snapshotLine">On-chain snapshot: connecting… · refreshes every 30 seconds</p>
+  </section>
+
+  <details>
+    <summary>One flat price — read live from the contract</summary>
+    <p class="muted">Both lanes pay the same price: <span class="mono">pricePerShare()</span>, 0.000841 BNB (≈ $0.50) at launch. This page never hard-codes it — the number above is read from the contract every 30 seconds. Payment must equal exactly <span class="mono">shares × pricePerShare()</span>; any other amount reverts, so the contract cannot overcharge you. The owner can adjust the price for future mints with <span class="mono">setPrice()</span> — it applies to both lanes equally, and shares already minted are never affected. Max 15 shares per wallet across both lanes combined.</p>
+  </details>
+
+  <section class="panel" id="how">
+    <p class="eyebrow">Three steps / Your own agent</p>
+    <h2>How to mint with your agent</h2>
+    <div class="steps">
+      <div class="step"><div class="n">STEP 01</div><h3>Open your BAW agent</h3><p class="muted">Use the Binance Agentic Wallet that holds your Agent ID (for the Agent lane) or any wallet for the Public lane. Keep a little BNB for gas. Developer Mode may be required for contract calls.</p></div>
+      <div class="step"><div class="n">STEP 02</div><h3>Copy the prompt below</h3><p class="muted">The prompt makes your agent verify the contract first, then read your lane status. No wallet connection on this site; no spot is created by reading.</p></div>
+      <div class="step"><div class="n">STEP 03</div><h3>Preview, then confirm</h3><p class="muted">Ask your agent for the mint. Review the preview — lane, shares, exact BNB, gas — and confirm in BAW. Tokens arrive in the same transaction; there is no reservation or escrow.</p></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <p class="eyebrow">Copy this to your agent</p>
+    <h2>The MuseAI mint prompt</h2>
+    <textarea id="agentPrompt" readonly>You are my Binance Agentic Wallet agent. Work on MuseAI (AutoMuse) on BNB Smart Chain (chain 56). The mint contract is 0x4f468aff03ce7de1b6512ab044f338f92689ce2e — a single contract that is both the ERC-20 token and the sale (AgentMintDualToken).
+
+FIRST, VERIFY: check this address on BscScan and confirm the source code is verified on Sourcify (exact match) as AgentMintDualToken. If the address, the contract name or the verification does not match, STOP and report it — do not proceed.
+
+THEN, READ-ONLY STATUS: call pricePerShare(), agentSharesRemaining(), publicSharesRemaining(), sharesRemaining(), mintingOpen(), and mintedBy() for my wallet address. Report: the live price, how many shares each lane has left, and how many shares I already hold. Never guess the price — always read pricePerShare() fresh, because the owner can adjust it for future mints.
+
+SALE RULES: 500 Agent shares (mintAgent — needs my Binance Agent ID) + 500 Public shares (mintPublic — any wallet), one flat price for both lanes. 1 share = 1,000,000 AutoMuse. Max 15 shares per wallet across both lanes. Payment must equal exactly shares × pricePerShare() or the contract reverts.
+
+This status request is READ-ONLY: do not approve, sign, claim or send anything. If I later ask you to mint, prepare the call, show me the preview (lane, shares, exact BNB, estimated gas) and wait for my explicit confirmation before executing. Never ask for my seed phrase, private key or session credentials.</textarea>
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <button id="copyBtn" type="button">Copy agent prompt</button>
+      <span class="muted" id="copyState" style="font-size:13px"></span>
+    </div>
+  </section>
+
+  <section class="panel">
+    <p class="eyebrow">Mint desk / Read-only</p>
+    <h2>Check a wallet</h2>
+    <p class="muted">Paste any BNB address to see its MuseAI position. Read-only — nothing is signed or sent. Your agent can fill this in for you automatically.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <input type="text" id="deskAddr" placeholder="0x… wallet address" style="flex:1;min-width:240px">
+      <button id="deskBtn" type="button">Check</button>
+    </div>
+    <div id="deskOut" style="margin-top:8px"></div>
+  </section>
+
+  <section class="panel" id="contract">
+    <p class="eyebrow">Official contract / BNB Chain · 56</p>
+    <h2>One contract, verified</h2>
+    <div class="addrrow"><code style="flex:1;min-width:260px">0x4f468aff03ce7de1b6512ab044f338f92689ce2e</code>
+    <button class="ghost" id="copyAddr" type="button">Copy</button></div>
+    <p class="muted">Token + sale in one contract (AgentMintDualToken) — the same contract behind the main MuseAI site and the quest page. Source verified on Sourcify (exact match). Check the verification before you mint, the same way the prompt makes your agent check.</p>
+    <p><a href="https://bscscan.com/token/0x4f468aff03ce7de1b6512ab044f338f92689ce2e" target="_blank" rel="noopener">View on BscScan</a> · <a href="https://sourcify.dev/#/lookup/0x4f468aff03ce7de1b6512ab044f338f92689ce2e" target="_blank" rel="noopener">Verify on Sourcify</a></p>
+  </section>
+
+  <details>
+    <summary>Payment, delivery and closing terms</summary>
+    <p class="muted">Payment is the mint: your AutoMuse is delivered in the same transaction — no reservations, no escrow, no claim step. Mint proceeds stay in the contract until the owner withdraws them (visible on-chain). Transfers are locked until the PancakeSwap pool exists and the owner opens trading; that rule applies to every holder equally. The mint is announced to close on 30 November 2026 (the owner closes it on-chain with closeMinting()) or earlier if a lane sells out. Because a mint is a completed on-chain delivery, there is no refund mechanism — check the contract and the exact total before you confirm. No price promises — DYOR.</p>
+  </details>
+
+  <footer>
+    <p>MuseAI (AutoMuse) — a project about the development of AI, from models to autonomous agents.<br>
+    <a href="https://automuseai.github.io/">Main site</a> · <a href="https://automuseai.github.io/quest/">Quest</a> · <a href="https://github.com/automuseai" target="_blank" rel="noopener">GitHub</a> · <a href="https://bscscan.com/token/0x4f468aff03ce7de1b6512ab044f338f92689ce2e" target="_blank" rel="noopener">BscScan</a></p>
+    <p>Independent project. No Binance affiliation. This page never asks for a seed phrase or private key — anyone who does is not us.</p>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+<script>
+(function(){
+  "use strict";
+  var CONTRACT = "0x4f468aff03ce7de1b6512ab044f338f92689ce2e";
+  var RPCS = ["https://bsc.publicnode.com", "https://bsc-dataseed1.binance.org", "https://bsc-dataseed2.binance.org"];
+  var CLOSE_ISO = "2026-11-30T23:59:59+08:00";
+  var ABI = [
+    "function agentMinted() view returns (uint256)",
+    "function publicMinted() view returns (uint256)",
+    "function pricePerShare() view returns (uint256)",
+    "function agentSharesRemaining() view returns (uint256)",
+    "function publicSharesRemaining() view returns (uint256)",
+    "function mintingOpen() view returns (bool)",
+    "function tradingOpen() view returns (bool)",
+    "function mintedBy(address) view returns (uint256)",
+    "function balanceOf(address) view returns (uint256)"
+  ];
+  function $(id){ return document.getElementById(id); }
+  function fmt(n){ return Number(n).toLocaleString("en-US"); }
+  function bnb(wei){ return Number(ethers.formatEther(wei)).toFixed(6); }
+
+  function tickCountdown(){
+    var ms = new Date(CLOSE_ISO).getTime() - Date.now();
+    if (ms <= 0){ $("countdown").textContent = "closed"; return; }
+    var d = Math.floor(ms/86400000), h = Math.floor(ms%86400000/3600000), m = Math.floor(ms%3600000/60000), s = Math.floor(ms%60000/1000);
+    $("countdown").textContent = d + "d " + h + "h " + m + "m " + s + "s";
+  }
+  tickCountdown(); setInterval(tickCountdown, 1000);
+
+  function copyText(text, stateEl, doneMsg){
+    function done(){ stateEl.textContent = doneMsg; setTimeout(function(){ stateEl.textContent = ""; }, 2600); }
+    function fallback(){
+      var ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta);
+      ta.select(); try{ document.execCommand("copy"); }catch(e){} document.body.removeChild(ta); done();
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(fallback); }
+    else fallback();
+  }
+  $("copyBtn").addEventListener("click", function(){ copyText($("agentPrompt").value, $("copyState"), "Copied — paste it to your agent."); });
+  $("copyAddr").addEventListener("click", function(){ copyText(CONTRACT, $("copyState"), "Contract address copied."); });
+
+  var provider = null, contract = null, rpcIdx = 0;
+  function makeProvider(){
+    provider = new ethers.JsonRpcProvider(RPCS[rpcIdx % RPCS.length], 56, { staticNetwork: true });
+    contract = new ethers.Contract(CONTRACT, ABI, provider);
+  }
+  function refresh(){
+    if (!window.ethers) return;
+    if (!contract) makeProvider();
+    Promise.all([
+      contract.agentMinted(), contract.publicMinted(), contract.pricePerShare(),
+      contract.agentSharesRemaining(), contract.publicSharesRemaining(),
+      contract.mintingOpen(), contract.tradingOpen(),
+      provider.getBalance(CONTRACT), provider.getBlockNumber()
+    ]).then(function(r){
+      var aM = Number(r[0]), pM = Number(r[1]);
+      $("agentBig").textContent = fmt(aM) + " / 500";
+      $("publicBig").textContent = fmt(pM) + " / 500";
+      $("barAgent").style.width = (aM / 500 * 100) + "%";
+      $("barPublic").style.width = (pM / 500 * 100) + "%";
+      $("agentLeft").textContent = fmt(Number(r[3])) + " shares";
+      $("publicLeft").textContent = fmt(Number(r[4])) + " shares";
+      $("kvTotalMinted").textContent = fmt(aM + pM) + " / 1,000 shares";
+      $("barTotal").style.width = ((aM + pM) / 1000 * 100) + "%";
+      $("kvPrice").textContent = bnb(r[2]) + " BNB / share";
+      $("kvRaised").textContent = bnb(r[7]) + " BNB";
+      $("kvTrading").textContent = r[6] ? "Open" : "Locked — opens after the PancakeSwap pool";
+      var chip = $("stateChip");
+      if (r[5]){ chip.textContent = "LIVE NOW"; chip.className = "chip live"; }
+      else { chip.textContent = "MINT CLOSED"; chip.className = "chip closed"; }
+      $("snapshotLine").textContent = "On-chain snapshot at block " + fmt(r[8]) + " · refreshes every 30 seconds";
+    }).catch(function(){
+      rpcIdx++; contract = null; /* try the next RPC on the following refresh */
+      $("snapshotLine").textContent = "On-chain snapshot: RPC hiccup — retrying automatically…";
+    });
+  }
+
+  $("deskBtn").addEventListener("click", function(){
+    var addr = $("deskAddr").value.trim();
+    var out = $("deskOut");
+    if (!/^0x[0-9a-fA-F]{40}$/.test(addr)){ out.innerHTML = '<p class="err">That does not look like a BNB address.</p>'; return; }
+    if (!window.ethers){ out.innerHTML = '<p class="err">Chain library failed to load — check the address on BscScan instead.</p>'; return; }
+    if (!contract) makeProvider();
+    out.innerHTML = '<p class="muted">Reading…</p>';
+    Promise.all([ contract.mintedBy(addr), contract.balanceOf(addr) ]).then(function(r){
+      var shares = Number(r[0]);
+      var bal = Math.round(Number(ethers.formatEther(r[1])));
+      out.innerHTML =
+        '<div class="kv"><span>Shares minted by this wallet</span><b>' + fmt(shares) + ' / 15</b></div>' +
+        '<div class="kv"><span>AutoMuse balance</span><b>' + fmt(bal) + '</b></div>' +
+        '<div class="kv"><span>Can still mint</span><b>' + fmt(15 - shares) + ' shares</b></div>';
+    }).catch(function(){
+      out.innerHTML = '<p class="err">Read failed — try again in a moment.</p>';
+    });
+  });
+
+  if (window.ethers){ refresh(); setInterval(refresh, 30000); }
+  else { $("snapshotLine").textContent = "Chain library failed to load — the contract address and verification links on this page still work."; }
+})();
+</script>
+</body>
+</html>
